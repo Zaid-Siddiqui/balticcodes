@@ -47,7 +47,7 @@ jobs:
         
         git reset --hard
         git clean -fdx
-
+        
         # Check if dist folder exists before proceeding
         if [ -d "dist" ] && [ "$(ls -A dist)" ]; then
           # If the dist folder exists and is not empty, copy the contents
