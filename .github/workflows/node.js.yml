@@ -46,6 +46,6 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: dist/  # Ensure the build folder exists and has a trailing slash
         server-dir: /public_html/
-        protocol: sftp
+        protocol: ftps
         debug: true
         
