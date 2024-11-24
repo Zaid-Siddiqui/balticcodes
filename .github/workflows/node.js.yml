@@ -2,7 +2,7 @@ name: Deploy static content to Hostinger
 
 on:
   push:
-    branches: ['main']  # Replace with your default branch if needed
+    branches: ['master']  # Replace with your default branch if needed
   workflow_dispatch:
 
 jobs:
