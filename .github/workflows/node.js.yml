@@ -16,7 +16,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        persist-credentials: false # Disable default token handling
+        persist-credentials: false
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -30,9 +30,9 @@ jobs:
     - name: Build the project
       run: npm run build
 
-    - name: Verify build output
+    - name: Debug build directory
       run: |
-        echo "Contents of dist/ folder:"
+        echo "Contents of the build directory:"
         ls -la dist/
 
     - name: Push build output to another branch
@@ -45,10 +45,15 @@ jobs:
         git fetch origin build || git checkout --orphan build
         git reset --hard
         git clean -fdx
-        cp -r dist/* .
-        git add .
-        git commit -m "Build: $(date +'%Y-%m-%d %H:%M:%S')"
-        git push origin build --force
+        if [ -d "dist" ]; then
+          cp -r dist/* .
+          git add .
+          git commit -m "Build: $(date +'%Y-%m-%d %H:%M:%S')"
+          git push origin build --force
+        else
+          echo "Error: dist folder not found. Build might have failed."
+          exit 1
+        fi
 
     - name: Deploy to Hostinger
       uses: SamKirkland/FTP-Deploy-Action@v4.3.2
