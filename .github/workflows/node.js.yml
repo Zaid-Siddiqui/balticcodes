@@ -28,7 +28,7 @@ jobs:
         run: ls -l ./dist  # Check the output directory
 
       - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.5.0
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.2
         with:
           server: ftp.balticcodes.com  # Replace with your FTP host
           username: ${{ secrets.FTP_USERNAME }}
