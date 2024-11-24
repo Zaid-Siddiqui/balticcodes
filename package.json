@@ -1,14 +1,14 @@
 {
   "name": "balticcodes",
   "private": true,
-  "version": "0.0.1", // Updated version to follow semver
+  "version": "0.0.1",
   "type": "module",
   "homepage": "https://balticcodes.com/",
   "scripts": {
-    "dev": "vite", // Start local development server
-    "build": "vite build", // Build for production
-    "preview": "vite preview", // Preview the production build
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0" // Run linter with strict settings
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "react": "^18.2.0",
