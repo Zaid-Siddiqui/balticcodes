@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: pages
 
+    name: Build and Push
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -32,14 +33,14 @@ jobs:
         echo "Contents of dist/ folder:"
         ls -la dist/
 
-    - name: Push build output to another branch
+    - name: Push
       uses: s0/git-publish-subdir-action@develop
       env:
         REPO: self
-        BRANCH: build
-        FOLDER: dist
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        MESSAGE: "Build: ({sha}) {msg}"
+        BRANCH: build # The branch name where you want to push the assets
+        FOLDER: dist # The directory where your assets are generated
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
+        MESSAGE: "Build: ({sha}) {msg}" # The commit message
 
     - name: Deploy to Hostinger
       uses: SamKirkland/FTP-Deploy-Action@v4.3.2
