@@ -1,18 +1,13 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Deploy to Hostinger
+name: Deploy to Hostinger and Build Push
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
   workflow_dispatch:
-  
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
     environment: pages
 
@@ -20,7 +15,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js environment
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
@@ -38,6 +32,15 @@ jobs:
         echo "Contents of dist/ folder:"
         ls -la dist/
 
+    - name: Push build output to another branch
+      uses: s0/git-publish-subdir-action@develop
+      env:
+        REPO: self
+        BRANCH: build
+        FOLDER: dist
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MESSAGE: "Build: ({sha}) {msg}"
+
     - name: Deploy to Hostinger
       uses: SamKirkland/FTP-Deploy-Action@v4.3.2
       with:
@@ -48,4 +51,3 @@ jobs:
         server-dir: /public_html/
         protocol: ftps
         debug: true
-        
