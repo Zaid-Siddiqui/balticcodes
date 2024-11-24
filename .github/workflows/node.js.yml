@@ -27,6 +27,11 @@ jobs:
       - name: Verify build output directory
         run: ls -l ./dist  # Ensure this matches your actual build output directory
 
+      - name: Debug secrets (safe check)
+        run: |
+          echo "FTP_USERNAME is set: ${{ secrets.FTP_USERNAME }}"
+          # Do not print passwords or sensitive data!
+
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.2
         with:
