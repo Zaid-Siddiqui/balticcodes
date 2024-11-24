@@ -30,7 +30,7 @@ jobs:
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@4.5.0
         with:
-          server: ftp.yourdomain.com  # Replace with your FTP host
+          server: ftp.balticcodes.com  # Replace with your FTP host
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist  # Replace with your build output directory
