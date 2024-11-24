@@ -28,8 +28,7 @@ jobs:
       run: npm ci
 
     - name: Build the project
-      run: |
-        npm run build || { echo 'Build failed'; exit 1; }
+      run: npm run build 
 
     - name: Verify build output
       run: |
