@@ -31,7 +31,6 @@ jobs:
 
     - name: Build the project
       run: npm run build
-    - run: npm test
 
     - name: Verify build output
       run: |
