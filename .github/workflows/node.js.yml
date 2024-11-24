@@ -28,37 +28,13 @@ jobs:
       run: npm ci
 
     - name: Build the project
-      run: npm run build
+      run: |
+        npm run build || { echo 'Build failed'; exit 1; }
 
     - name: Verify build output
       run: |
         echo "Contents of dist/ folder:"
         ls -la dist/
-
-    - name: Push build output to another branch
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        
-        # Ensure the build branch exists, or create it as an orphan branch
-        git fetch origin build || git checkout --orphan build
-        
-        git reset --hard
-        git clean -fdx
-        
-        # Check if dist folder exists before proceeding
-        if [ -d "dist" ] && [ "$(ls -A dist)" ]; then
-          # If the dist folder exists and is not empty, copy the contents
-          cp -r dist/* .
-          git add .
-          git commit -m "Build: $(date +'%Y-%m-%d %H:%M:%S')"
-          git push origin build --force
-        else
-          echo "Error: dist folder not found or is empty. Build might have failed."
-          exit 1
-        fi
 
     - name: Deploy to Hostinger
       uses: SamKirkland/FTP-Deploy-Action@v4.3.2
