@@ -33,7 +33,7 @@ jobs:
           # Do not print passwords or sensitive data!
 
       - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.2
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ftp://45.84.207.247  # Hostinger FTP server IP
           username: ${{ secrets.FTP_USERNAME }}  # Reference the FTP_USERNAME secret
