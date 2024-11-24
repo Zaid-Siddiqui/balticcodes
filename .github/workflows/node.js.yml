@@ -44,5 +44,5 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}  # Add FTP server address to GitHub Secrets
           username: ${{ secrets.FTP_USERNAME }}  # Add FTP username to GitHub Secrets
           password: ${{ secrets.FTP_PASSWORD }}  # Add FTP password to GitHub Secrets
-          local-dir: dist/  # Directory containing the build output
+          local-dir: dist  # Directory containing the build output
           server-dir: /public_html/  # Target directory on the server
