@@ -28,7 +28,7 @@ jobs:
         run: ls -l ./dist  # Ensure this matches your actual build output directory
 
       - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.2
+        uses: carlosperate/ftp-action@v2
         with:
           server: 45.84.207.247  # Replace with your FTP server IP (no `ftp://`)
           username: ${{ secrets.FTP_USERNAME }}  # FTP username from GitHub Secrets
