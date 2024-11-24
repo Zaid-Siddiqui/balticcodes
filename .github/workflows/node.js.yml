@@ -27,16 +27,11 @@ jobs:
       - name: Verify build output directory
         run: ls -l ./dist  # Ensure this matches your actual build output directory
 
-      - name: Debug secrets (safe check)
-        run: |
-          echo "FTP_USERNAME is set: ${{ secrets.FTP_USERNAME }}"
-          # Do not print passwords or sensitive data!
-
       - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.2  # Use a valid version
         with:
-          server: ftp://45.84.207.247  # Hostinger FTP server IP
-          username: ${{ secrets.FTP_USERNAME }}  # Reference the FTP_USERNAME secret
-          password: ${{ secrets.FTP_PASSWORD }}  # Reference the FTP_PASSWORD secret
+          server: 45.84.207.247  # Hostinger FTP server IP (or your domain)
+          username: ${{ secrets.FTP_USERNAME }}  # FTP username from GitHub Secrets
+          password: ${{ secrets.FTP_PASSWORD }}  # FTP password from GitHub Secrets
           local-dir: ./dist  # Directory containing the build output
           server-dir: /public_html  # Target directory on the server
