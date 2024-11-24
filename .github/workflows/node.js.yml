@@ -38,11 +38,12 @@ jobs:
           ls -l dist  # Check if the dist folder exists and contains files
 
       # Step 6: Deploy to Hostinger via FTP
-      - name: Deploy to Hostinger
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.2
+      - name: Deploy to Hostinger via SFTP
+        uses: appleboy/scp-action@v0.1.0
         with:
-          server: ${{ secrets.FTP_SERVER }}  # FTP server address from GitHub Secrets
-          username: ${{ secrets.FTP_USERNAME }}  # FTP username from GitHub Secrets
-          password: ${{ secrets.FTP_PASSWORD }}  # FTP password from GitHub Secrets
-          local-dir: dist/  # Directory containing the build output (ensure the trailing slash)
-          server-dir: /public_html/  # Target directory on the server
+          host: ${{ secrets.FTP_SERVER }}  # Add the Hostinger server IP or domain
+          username: ${{ secrets.FTP_USERNAME }}  # Your FTP username
+          password: ${{ secrets.FTP_PASSWORD }}  # Your FTP password
+          source: dist/*  # The build output
+          target: /public_html/  # The target directory on the server
+
