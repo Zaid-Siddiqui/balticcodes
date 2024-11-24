@@ -32,8 +32,10 @@ jobs:
         run: npm run build
 
       # Step 5: Verify the build output directory
-      - name: Verify build output directory
-        run: ls -l ./dist  # Ensure 'dist' matches your Vite.js output directory
+      - name: Check build output
+        run: |
+          echo "Build output:"
+          ls -l dist  # Ensure the dist folder exists and contains files
 
       # Step 6: Deploy to Hostinger via FTP
       - name: Deploy to Hostinger via FTP
@@ -42,5 +44,5 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}  # Add FTP server address to GitHub Secrets
           username: ${{ secrets.FTP_USERNAME }}  # Add FTP username to GitHub Secrets
           password: ${{ secrets.FTP_PASSWORD }}  # Add FTP password to GitHub Secrets
-          local-dir: ./dist  # Directory containing the build output
-          server-dir: /public_html  # Target directory on the server
+          local-dir: dist/  # Directory containing the build output
+          server-dir: /public_html/  # Target directory on the server
