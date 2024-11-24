@@ -2,17 +2,17 @@ name: Deploy static content to Hostinger
 
 on:
   push:
-    branches: ['main']  # Change to your default branch
+    branches: ['main']  # Replace with your default branch if needed
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js environment
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -21,17 +21,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build project
         run: npm run build
 
-      - name: Verify Build Output
-        run: ls -l ./dist  # Check the output directory
+      - name: Verify build output directory
+        run: ls -l ./dist  # Ensure this matches your actual build output directory
 
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.2
         with:
-          server: ftp://45.84.207.247  # Replace with your FTP host
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist  # Replace with your build output directory
-          server-dir: /public_html  # Target directory on the server
+          server: 45.84.207.247  # Replace with your FTP server IP (no `ftp://`)
+          username: ${{ secrets.FTP_USERNAME }}  # FTP username from GitHub Secrets
+          password: ${{ secrets.FTP_PASSWORD }}  # FTP password from GitHub Secrets
+          local-dir: ./dist  # Path to your built site directory
+          server-dir: /public_html  # Target directory where files will be uploaded
