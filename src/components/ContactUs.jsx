@@ -5,10 +5,14 @@ const ContactUs = () => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
+        phone: "",
+        subject: "",
         message: "",
     });
-    const [isSubmitting, setIsSubmitting] = useState(false); // Handle loading state
-    const [error, setError] = useState(null); // To display error messages
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState(null);
+    const [emailSent, setEmailSent] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -17,28 +21,34 @@ const ContactUs = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true); // Set loading state to true
-        setError(null); // Reset any previous error
+        setIsSubmitting(true);
+        setError(null);
 
         try {
-            const response = await emailjs.sendForm(
-                process.env.REACT_APP_EMAILJS_SERVICE_ID,
-                process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
-                e.target,
-                process.env.REACT_APP_EMAILJS_PUBLIC_KEY
+            const response = await emailjs.send(
+                import.meta.env.VITE_EMAILJS_SERVICE_ID, // Vite uses 'import.meta.env' for env variables
+                import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+                formData,
+                import.meta.env.VITE_EMAILJS_PUBLIC_KEY
             );
 
             if (response.status === 200) {
-                alert('Message sent successfully!');
-                setFormData({ name: "", email: "", message: "" });
+                setEmailSent(true);
+                setFormData({
+                    name: "",
+                    email: "",
+                    phone: "",
+                    subject: "",
+                    message: "",
+                });
             } else {
-                throw new Error('Failed to send message');
+                throw new Error("Failed to send message.");
             }
         } catch (err) {
-            console.error('Error sending email:', err);
-            setError('An error occurred. Please try again.');
+            console.error("Error sending email:", err);
+            setError("An error occurred. Please try again.");
         } finally {
-            setIsSubmitting(false); // Reset loading state
+            setIsSubmitting(false);
         }
     };
 
@@ -75,6 +85,36 @@ const ContactUs = () => {
                 />
             </div>
             <div>
+                <label htmlFor="phone" className="block mb-2">
+                    Phone
+                </label>
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    className="w-full p-3 rounded-lg border"
+                    placeholder="Your Phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                />
+            </div>
+            <div>
+                <label htmlFor="subject" className="block mb-2">
+                    Subject
+                </label>
+                <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    className="w-full p-3 rounded-lg border"
+                    placeholder="Subject"
+                    required
+                    value={formData.subject}
+                    onChange={handleChange}
+                />
+            </div>
+            <div>
                 <label htmlFor="message" className="block mb-2">
                     Message
                 </label>
@@ -90,16 +130,13 @@ const ContactUs = () => {
                 ></textarea>
             </div>
             {error && <p className="text-red-500">{error}</p>}
+            {emailSent && <p className="text-green-500">Message sent successfully!</p>}
             <button
                 type="submit"
                 className="w-full bg-blue-500 text-white py-3 rounded-lg"
                 disabled={isSubmitting}
             >
-                {isSubmitting ? (
-                    <span>Sending...</span> // Optionally, replace with a spinner
-                ) : (
-                    "Send Message"
-                )}
+                {isSubmitting ? "Sending..." : "Send Message"}
             </button>
         </form>
     );
