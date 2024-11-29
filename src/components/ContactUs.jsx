@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
 
 const ContactUs = () => {
     const [formData, setFormData] = useState({
@@ -16,21 +17,22 @@ const ContactUs = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("/send-email",{
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
+            const response = await emailjs.sendForm(
+                process.env.REACT_APP_EMAILJS_SERVICE_ID, // Using environment variable
+                process.env.REACT_APP_EMAILJS_TEMPLATE_ID, // Using environment variable
+                e.target, // The form itself
+                process.env.REACT_APP_EMAILJS_PUBLIC_KEY // Using environment variable
+            );
 
-            if (response.ok) {
-                alert("Message sent successfully!");
+            if (response.status === 200) {
+                alert('Message sent successfully!');
                 setFormData({ name: "", email: "", message: "" }); // Reset form
             } else {
-                alert("Failed to send message. Please try again.");
+                alert('Failed to send message. Please try again.');
             }
         } catch (error) {
-            console.error("Error:", error);
-            alert("An error occurred. Please try again.");
+            console.error('Error sending email:', error);
+            alert('An error occurred. Please try again.');
         }
     };
 
