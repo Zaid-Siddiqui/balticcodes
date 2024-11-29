@@ -7,8 +7,8 @@ const ContactUs = () => {
         email: "",
         message: "",
     });
-
-    const [isSubmitting, setIsSubmitting] = useState(false); // To handle loading state
+    const [isSubmitting, setIsSubmitting] = useState(false); // Handle loading state
+    const [error, setError] = useState(null); // To display error messages
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,24 +18,25 @@ const ContactUs = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true); // Set loading state to true
+        setError(null); // Reset any previous error
 
         try {
             const response = await emailjs.sendForm(
-                process.env.REACT_APP_EMAILJS_SERVICE_ID, // Using environment variable
-                process.env.REACT_APP_EMAILJS_TEMPLATE_ID, // Using environment variable
-                e.target, // The form itself
-                process.env.REACT_APP_EMAILJS_PUBLIC_KEY // Using environment variable
+                process.env.REACT_APP_EMAILJS_SERVICE_ID,
+                process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+                e.target,
+                process.env.REACT_APP_EMAILJS_PUBLIC_KEY
             );
 
             if (response.status === 200) {
                 alert('Message sent successfully!');
-                setFormData({ name: "", email: "", message: "" }); // Reset form
+                setFormData({ name: "", email: "", message: "" });
             } else {
-                alert('Failed to send message. Please try again.');
+                throw new Error('Failed to send message');
             }
-        } catch (error) {
-            console.error('Error sending email:', error);
-            alert('An error occurred. Please try again.');
+        } catch (err) {
+            console.error('Error sending email:', err);
+            setError('An error occurred. Please try again.');
         } finally {
             setIsSubmitting(false); // Reset loading state
         }
@@ -44,14 +45,14 @@ const ContactUs = () => {
     return (
         <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-                <label htmlFor="name" className="block mb-2 text-n-1">
+                <label htmlFor="name" className="block mb-2">
                     Name
                 </label>
                 <input
                     type="text"
                     id="name"
                     name="name"
-                    className="w-full p-3 rounded-lg border border-n-1/10"
+                    className="w-full p-3 rounded-lg border"
                     placeholder="Your Name"
                     required
                     value={formData.name}
@@ -59,14 +60,14 @@ const ContactUs = () => {
                 />
             </div>
             <div>
-                <label htmlFor="email" className="block mb-2 text-n-1">
+                <label htmlFor="email" className="block mb-2">
                     Email
                 </label>
                 <input
                     type="email"
                     id="email"
                     name="email"
-                    className="w-full p-3 rounded-lg border border-n-1/10"
+                    className="w-full p-3 rounded-lg border"
                     placeholder="Your Email"
                     required
                     value={formData.email}
@@ -74,13 +75,13 @@ const ContactUs = () => {
                 />
             </div>
             <div>
-                <label htmlFor="message" className="block mb-2 text-n-1">
+                <label htmlFor="message" className="block mb-2">
                     Message
                 </label>
                 <textarea
                     id="message"
                     name="message"
-                    className="w-full p-3 rounded-lg border border-n-1/10"
+                    className="w-full p-3 rounded-lg border"
                     placeholder="Your Message"
                     rows="4"
                     required
@@ -88,12 +89,17 @@ const ContactUs = () => {
                     onChange={handleChange}
                 ></textarea>
             </div>
+            {error && <p className="text-red-500">{error}</p>}
             <button
                 type="submit"
-                className="w-full bg-n-6 text-white py-3 rounded-lg"
-                disabled={isSubmitting} // Disable when submitting
+                className="w-full bg-blue-500 text-white py-3 rounded-lg"
+                disabled={isSubmitting}
             >
-                {isSubmitting ? "Sending..." : "Send Message"} {/* Show loading text */}
+                {isSubmitting ? (
+                    <span>Sending...</span> // Optionally, replace with a spinner
+                ) : (
+                    "Send Message"
+                )}
             </button>
         </form>
     );
