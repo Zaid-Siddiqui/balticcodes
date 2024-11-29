@@ -8,6 +8,8 @@ const ContactUs = () => {
         message: "",
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false); // To handle loading state
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -15,6 +17,7 @@ const ContactUs = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true); // Set loading state to true
 
         try {
             const response = await emailjs.sendForm(
@@ -33,6 +36,8 @@ const ContactUs = () => {
         } catch (error) {
             console.error('Error sending email:', error);
             alert('An error occurred. Please try again.');
+        } finally {
+            setIsSubmitting(false); // Reset loading state
         }
     };
 
@@ -86,8 +91,9 @@ const ContactUs = () => {
             <button
                 type="submit"
                 className="w-full bg-n-6 text-white py-3 rounded-lg"
+                disabled={isSubmitting} // Disable when submitting
             >
-                Send Message
+                {isSubmitting ? "Sending..." : "Send Message"} {/* Show loading text */}
             </button>
         </form>
     );
